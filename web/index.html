@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>灾害监测 · 摄像头控制</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="atmosphere" aria-hidden="true"></div>
+
+  <main class="shell">
+    <header class="brand-block">
+      <p class="brand">灾害监测</p>
+      <h1 class="title">摄像头云台控制</h1>
+      <p class="lede">选择目标角度，驱动步进电机转向对应方位进行巡检取景。</p>
+    </header>
+
+    <section class="camera-panel" aria-labelledby="camera-heading">
+      <div class="camera-header">
+        <h2 id="camera-heading">实时画面</h2>
+        <span class="live-dot">LIVE</span>
+      </div>
+      <img class="camera-feed" src="/video_feed" alt="监控摄像头实时画面" />
+    </section>
+
+    <section class="control" aria-labelledby="control-heading">
+      <div class="status-row">
+        <h2 id="control-heading" class="section-label">云台方位</h2>
+        <p class="angle-readout" aria-live="polite">
+          当前 <span id="current-angle">0</span>°
+        </p>
+      </div>
+
+      <div class="dial" role="img" aria-label="云台方位示意">
+        <div class="dial-ring">
+          <div class="dial-tick" style="--a: 0deg"></div>
+          <div class="dial-tick" style="--a: 60deg"></div>
+          <div class="dial-tick" style="--a: 120deg"></div>
+          <div class="dial-tick" style="--a: 180deg"></div>
+          <div class="dial-tick" style="--a: 240deg"></div>
+          <div class="dial-tick" style="--a: 300deg"></div>
+          <div class="dial-needle" id="dial-needle"></div>
+          <div class="dial-core">
+            <span id="dial-angle">0°</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="angle-grid" role="group" aria-label="旋转到指定角度">
+        <button type="button" class="angle-btn is-active" data-angle="0">0°</button>
+        <button type="button" class="angle-btn" data-angle="60">60°</button>
+        <button type="button" class="angle-btn" data-angle="120">120°</button>
+        <button type="button" class="angle-btn" data-angle="180">180°</button>
+        <button type="button" class="angle-btn" data-angle="240">240°</button>
+        <button type="button" class="angle-btn" data-angle="300">300°</button>
+      </div>
+
+      <div class="nudge-row" role="group" aria-label="微调旋转">
+        <button type="button" class="nudge-btn" id="btn-left" aria-label="逆时针旋转 60 度">
+          <span class="nudge-icon" aria-hidden="true">‹</span>
+          左转 60°
+        </button>
+        <button type="button" class="nudge-btn" id="btn-home">回零位</button>
+        <button type="button" class="nudge-btn" id="btn-right" aria-label="顺时针旋转 60 度">
+          右转 60°
+          <span class="nudge-icon" aria-hidden="true">›</span>
+        </button>
+      </div>
+
+      <p class="feedback" id="feedback" role="status">就绪 · 点击角度按钮开始转向</p>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

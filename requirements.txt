@@ -1,0 +1,8 @@
+wiringpi
+opencv-python
+numpy
+Pillow
+flask
+# pyserial 已移除（蜂鸣器改为GPIO控制）
+# 如需麦克风实时分析可取消下面注释
+# pyaudio
