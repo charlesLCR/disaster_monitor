@@ -28,7 +28,7 @@ def get_severity_and_measures(disaster_type: str, confidence: float, sensor_data
     占位函数：灾害程度判断 + 应对措施
     TODO: 你在这里实现具体逻辑（可根据confidence、多个传感器值综合判断）
     """
-    severity = 3  # 默认中等等级
+    severity = 3
     measures = "请立即检查现场并做好疏散准备。"
 
     if disaster_type == 'fire':
@@ -40,7 +40,6 @@ def get_severity_and_measures(disaster_type: str, confidence: float, sensor_data
     elif disaster_type == 'flood':
         severity = 3
         measures = "注意水位变化，转移低洼处人员和物资。"
-    # TODO: 补充其他类型
 
     return severity, measures
 
@@ -62,7 +61,7 @@ def main():
     vib = VibrationSensor()
     smoke = SmokeSensor()
     audio = AudioSensor()
-    ai = DisasterClassifier()
+    ai = DisasterClassifier(model_path="models/disaster_classifier.onnx")
     notifier = Notifier()
     db = DBManager(DB_PATH)
 
@@ -93,7 +92,6 @@ def main():
                 if frame is None:
                     continue
 
-                # 采集所有传感器
                 all_sensor_data = {
                     **sensor_snapshot(),
                     "timestamp": datetime.now().isoformat(),
@@ -109,7 +107,6 @@ def main():
                       f"Temp={dht_data['temp']}°C | Rain={rain_data['triggered']} | "
                       f"Smoke={smoke_data['value']} | Vib={vib_data['triggered']}")
 
-                # AI分析
                 result = ai.analyze(frame, all_sensor_data)
 
                 if result["disaster_type"]:
@@ -119,14 +116,12 @@ def main():
                         all_sensor_data
                     )
 
-                    # 触发报警
                     notifier.trigger_alert(
                         result["disaster_type"],
                         severity,
                         result["details"]
                     )
 
-                    # 保存图片（可选）
                     img_path = None
                     if SAVE_TRIGGERED_IMAGES:
                         timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -137,7 +132,6 @@ def main():
                         cv2.imwrite(img_path, frame)
                         print(f"[保存] 触发图片: {img_path}")
 
-                    # 写入数据库
                     db.log_disaster(
                         location=DEVICE_LOCATION,
                         disaster_type=result["disaster_type"],
@@ -148,7 +142,7 @@ def main():
                         image_path=img_path
                     )
 
-                time.sleep(1.5)  # 每个位置间隔
+                time.sleep(1.5)
 
             print(f"--- 完成一轮扫描，休眠 {SCAN_INTERVAL} 秒 ---\n")
             time.sleep(SCAN_INTERVAL)

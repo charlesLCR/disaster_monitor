@@ -9,7 +9,6 @@ import threading
 
 from flask import Flask, Response, jsonify, request, send_from_directory
 
-# 保证以模块 / 脚本启动时都能找到项目根
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
@@ -79,10 +78,9 @@ def status():
     })
 
 
-def start_web_server(background: bool = True) -> threading.Thread | None:
+def start_web_server(background: bool = True):
     """在后台线程启动 Flask（供 main.py 调用）。"""
     def _run():
-        # 关闭 reloader，避免双进程重复打开摄像头
         app.run(host=WEB_HOST, port=WEB_PORT, debug=False, threaded=True, use_reloader=False)
 
     if background:

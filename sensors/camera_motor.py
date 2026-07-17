@@ -43,14 +43,13 @@ class CameraMotor:
             return
 
         if self.simulate:
-            # 用耗时近似真实转向，便于 Web 调试
             time.sleep(min(1.5, abs(diff) / 180.0 * 0.6 + 0.2))
             self.current_angle = target_angle
             print(f"[Motor] 模拟旋转到 {target_angle}°")
             return
 
         direction = 1 if diff > 0 else -1
-        steps = int(abs(diff) / 360.0 * 4096)  # 实验中常见4096步/圈
+        steps = int(abs(diff) / 360.0 * 4096)
         seq = self.sequence if direction > 0 else self.sequence[::-1]
 
         for i in range(steps):
@@ -67,7 +66,7 @@ class CameraMotor:
         """旋转到角度并取当前共享摄像头帧。"""
         print(f"[Motor] 正在旋转到 {angle}° ...")
         self.rotate_to(angle)
-        time.sleep(1.2)  # 等待机械稳定
+        time.sleep(1.2)
         if camera_service is None:
             from camera_service import get_camera_service
             camera_service = get_camera_service()

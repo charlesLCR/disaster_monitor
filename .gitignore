@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# 运行产物
+disaster_log.db
+triggered_images/
+*.log
+
+# 系统文件
+.DS_Store
+Thumbs.db
